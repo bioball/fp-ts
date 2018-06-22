@@ -88,7 +88,7 @@ describe('Either', () => {
     assert.deepEqual(e2, left(new SyntaxError('Unexpected end of JSON input')))
 
     const e3 = tryCatch(() => {
-      throw 'a string'
+      throw 'a string' // tslint:disable-line no-string-throw
     })
     assert.deepEqual(e3, left(new Error('a string')))
 
@@ -248,7 +248,7 @@ describe('Either', () => {
 
   it('refineOrElse', () => {
     type Color = 'red' | 'blue'
-    const isColor = (s: string): s is Color => s === 'red' || s == 'blue'
+    const isColor = (s: string): s is Color => s === 'red' || s === 'blue'
     assert.deepEqual(right('red').refineOrElse(isColor, -1), right('red'))
     assert.deepEqual(right('foo').refineOrElse(isColor, -1), left(-1))
     assert.deepEqual(left<number, string>(12).refineOrElse(isColor, -1), left(12))
@@ -256,7 +256,7 @@ describe('Either', () => {
 
   it('refineOrElseL', () => {
     type Color = 'red' | 'blue'
-    const isColor = (s: string): s is Color => s === 'red' || s == 'blue'
+    const isColor = (s: string): s is Color => s === 'red' || s === 'blue'
     const errorHandler = (s: string) => `invalid color ${s}`
     assert.deepEqual(right('red').refineOrElseL(isColor, errorHandler), right('red'))
     assert.deepEqual(right('foo').refineOrElseL(isColor, errorHandler), left('invalid color foo'))
@@ -265,7 +265,7 @@ describe('Either', () => {
 
   it('fromRefinement', () => {
     type Color = 'red' | 'blue'
-    const isColor = (s: string): s is Color => s === 'red' || s == 'blue'
+    const isColor = (s: string): s is Color => s === 'red' || s === 'blue'
     const from = fromRefinement(isColor, s => `invalid color ${s}`)
     assert.deepEqual(from('red'), right('red'))
     assert.deepEqual(from('foo'), left('invalid color foo'))
